@@ -38,24 +38,47 @@ survey	choices	result
 
 */
 
-function solution(survey, choices) {
-    let answer = '';
-    let R, T, C, F, J, M, A, N;
-
-    for(let i = 0; i < choices.length; i++) {
-        if (choices[i] === 1) {
-            
-        }
-        
-        // survey[i][0];
-    }
-    // for (let choice of choices) {
-    //     console.log(choice);
-        
-    // }
 // 몇 번 선택했는지 알아내서 -> 어느 지표에 점수가 들어가는지 확인 -> 점수 추가
 // 마지막에 점수 합산해서 성격 유형 결과내기
 
+function solution(survey, choices) {
+    let answer = '';
+    const character = {
+        R: 0, T: 0, C: 0, F: 0, J: 0, M: 0, A: 0, N: 0
+    };
+
+    for(let i = 0; i < choices.length; i++) {
+        if (choices[i] === 1) {
+            character[survey[i][0]] += 3;            
+        } else if (choices[i] === 2) {
+            character[survey[i][0]] += 2;
+        } else if (choices[i] === 3) {
+            character[survey[i][0]] += 1;
+        } else if (choices[i] === 5) {
+            character[survey[i][1]] += 1;
+        } else if (choices[i] === 6) {
+            character[survey[i][1]] += 2;
+        } else if (choices[i] === 7) {
+            character[survey[i][1]] += 3;
+        }
+    }
+
+    character['R'] >= character['T'] ? answer += 'R' : answer += 'T';
+    character['C'] >= character['F'] ? answer += 'C' : answer += 'F';
+    character['J'] >= character['M'] ? answer += 'J' : answer += 'M';
+    character['A'] >= character['N'] ? answer += 'A' : answer += 'N';
 
     return answer;
 }
+
+/*
+* +@ 다른 사람의 풀이
+
+! 검사자의 선택지(choices)에서 성격 지표 점수로 계산할 때: ARRAY.map() 사용
+const aplph = survey.map((v, i) => {
+        if(choices[i] > 4) obj[v.substring(1,2)] += choices[i] - 4 
+        if(choices[i] < 4) obj[v.substring(0,1)] += 4 - choices[i] 
+     })
+
+
+*/
