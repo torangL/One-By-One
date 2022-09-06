@@ -32,5 +32,4 @@ function solution(numbers, hand) {
 }
 
 // * 되새기기
-
 // * 더 효율적으로 작성하기
