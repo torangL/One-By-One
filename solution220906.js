@@ -73,10 +73,13 @@ function solution(numbers, hand) {
 
             if (leftDistance < rightDistance) {
                 answer += 'L';
+                leftPlace = findPlace(numbers[i]);
             } else if (rightDistance < leftDistance) {
                 answer += 'R';
+                rightPlace = findPlace(numbers[i]);
             } else {
                 hand === 'left' ? answer += 'L' : answer += 'R';
+                hand === 'left' ? leftPlace = findPlace(numbers[i]) : rightPlace = findPlace(numbers[i]);
             }
         }
     }
@@ -85,5 +88,3 @@ function solution(numbers, hand) {
 
 // * 되새기기
 // * 더 효율적으로 작성하기
-
-// 뭔가 하나가 안 맞는데 문제점을 모르겠음. 찾아야함.
