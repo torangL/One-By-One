@@ -110,3 +110,140 @@
     // 가장 긴 length 값 출력
     return longest;
 };
+
+
+
+
+// ! Leetcode 9: Palindrome Number
+
+/**
+ * @param {number} x
+ * @return {boolean}
+ */
+// var isPalindrome = function(x) {
+//     // 앞에서 뒤로, 뒤에서 앞으로 읽어도 같은 숫자인지 여부를 출력하는 함수 작성
+
+//     // 숫자 -> 문자열로 변환
+//     x = String(x);
+    
+//     // x의 길이의 절반만큼 반복해서
+//     // x[n]과 x[x.length - n]이 같으면 palindrome
+//     for (let n = 0; n < parseInt(x.length / 2); n += 1) {
+//         if (x[n] !== x[x.length - 1 - n]) {
+//             return false;
+//         };
+//     };
+//     return true;
+// };
+
+// x를 문자열로 변환하지 않고 해보기
+var isPalindrome = function (x) {
+  // x % 10을 하면 일의 자리 수를 구할 수 있다.
+  // Math.floor(x / 10)을 하면 일의 자리 수를 제외한 나머지 숫자가 남는다.
+  // 이를 반복하여 일의 자리 수부터 가장 큰 자리 수까지 숫자를 뒤집어 구한다.
+  // 뒤집은 숫자가 x의 값과 같으면 palindrome
+
+  // x가 음수면 false
+  if (x < 0) { return false; }
+
+  // 뒤집어 구할 숫자를 할당할 변수 reversNum 선언
+  let reverseNum = 0;
+  
+  // x가 변하는 값을 저장할 변수 num 선언
+  let num = x; 
+
+  // 10으로 나눈 몫이 0이 될 때까지 반복 -> 모든 자리수를 살펴봄
+  while (num !== 0) {
+      // 일의 자리 수부터 숫자를 거꾸로 구함 -> reverNum에 10씩 곱하고, num을 10씩 나눔
+      reverseNum = (reverseNum * 10) + (num % 10);
+      num = Math.floor(num / 10);
+  };
+  // 거꾸로 구한 숫자 = x면 palindrome
+  return x === reverseNum;
+};
+
+// 121 -> 
+// 0 + 1 = 1, num = 12
+// 10 + 2 = 12, num = 1
+// 120 + 1 = 121, num = 0 => 121
+
+// 10 ->
+// 0 + 0 = 0, num = 1
+// 0 + 1 = 1, num = 0 => 1
+
+// 323 ->
+// 0 + 3, num = 32
+// 30 + 2 = 32, num = 3
+// 320 + 3, num = 0 => 323
+
+
+// 다른 방법 -> 메소드 적극 활용하기
+/**
+const reverseNum = x.toString().split("").reverse().join("");
+return Number(reverseNum) === x;
+*/
+
+
+
+// ! 프로그래머스 달리기 경주
+/**
+ * ? players: 선수들의 이름이 1등부터 현재 등수 순서대로 담긴 문자열 배열
+ * ? callings: 해설진이 부른 이름을 담은 문자열 배열
+ * TODO: 경주가 끝났을 때 선수들의 이름을 1등부터 등수 순서대로 배열에 담아 return하는 solution 함수 완성하기
+ * 해설진이 이름을 부른다 -> 선수가 자기 바로 앞의 선수를 추월할 때, 추월한 선수의 이름을 부름
+ */
+
+
+// * 시간 초과
+//  function solution(players, callings) {
+//   // 현재 등수
+//   var answer = [...players];
+
+//   // callings 배열에서 언급된 선수와 그 선수의 index - 1에 있는 선수를 교체
+//   // 반복문과 splice 메소드 사용
+
+//   for (let n = 0; n < callings.length; n += 1) {
+//     // answer의 callings[n]의 index -> index - 1 로 변경
+//     // answer의 callings[n]의 index + 1의 선수 -> index + 1 로 변경
+//     answer.splice(answer.indexOf(callings[n]) - 1, 2, 
+//     callings[n], answer[answer.indexOf(callings[n]) - 1]);
+//   }
+
+//   return answer;
+// }
+
+// [a, b, c]  -> b -> [b, a, c]
+
+
+function solution(players, callings) {
+  var answer = [...players];
+  // 현재 등수
+  const count = {};
+  players.forEach((player, index) => {
+    count[player] = index;
+  });
+
+  for (let n = 0; n < callings.length; n += 1) {
+    // 추월한 선수: callings[n]
+    let faster = callings[n];
+
+    // 추월하기 전 선수의 등수: count[callings[n]]
+    let fasterIdx = count[faster];
+    
+    // 추월당한 선수: answer[count[callings[n]] - 1]
+    let slower = answer[fasterIdx - 1];
+
+    // 현재 등수 업데이트(answer 배열)
+    answer[fasterIdx - 1] = faster;
+    answer[fasterIdx] = slower;
+
+    // 현재 등수 업데이트(count 객체)
+    count[faster] -= 1;
+    count[slower] += 1;
+  };
+
+  return answer;
+};
+
+// indexOf 메소드가 시간을 꽤 잡아먹는 듯?
+// 그래서 객체를 이용해서 선수 등수 관리
