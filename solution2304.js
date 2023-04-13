@@ -247,3 +247,50 @@ function solution(players, callings) {
 
 // indexOf 메소드가 시간을 꽤 잡아먹는 듯?
 // 그래서 객체를 이용해서 선수 등수 관리
+
+
+// ! Leetcode 735 Asteroid Collision
+/**
+ * @param {number[]} asteroids
+ * @return {number[]}
+ */
+
+ var asteroidCollision = function(asteroids) {
+  let i = 0;
+  while (i < asteroids.length) {
+      // 두 운석을 비교하여 나오는 경우의 수: 충돌하거나 충돌하지 않는다.
+      // 비교하는 운석
+      let a1 = asteroids[i];
+      let a2 = asteroids[i + 1];
+      if (a2 === undefined) { break; };
+
+      // 충돌하지 않는 경우의 수: a1+, a2+ || a1-, a2- || a1-, a2+
+      if (a1 * a2 > 0 || (a1 < 0 && a2 > 0)) { 
+          i += 1;
+          continue;
+      }
+
+      // 충돌했을 때의 경우의 수: a1+, a2-
+      // a1 > a2 -> a2 제거, 기준점은 a1의 index
+      if (a1 > Math.abs(a2)) {
+          asteroids.splice(i + 1, 1);
+          continue;
+      }
+
+      // a1 < a2 -> a1 제거, 기준점은 a2의 index - 1
+      else if (a1 < Math.abs(a2)) {
+          asteroids.splice(i, 1);
+          i = i === 0 ? 0 : i - 1; // i >= 0을 유지
+          continue;
+      }
+      
+      // a1 = a2 -> a1과 a2 모두 제거, 기준점은 a2의 index - 1
+      // 충돌 후 둘 다 사라졌으므로 이전 운석과 그 다음 운석 다시 비교
+      else if (a1 = Math.abs(a2)) {
+          asteroids.splice(i, 2);
+          i = i === 0 ? 0 : i - 1; // i >= 0을 유지
+          continue;
+      }
+  };
+  return asteroids;
+};
